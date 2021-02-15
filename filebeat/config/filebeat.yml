@@ -1,0 +1,26 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /logs/test/input.log
+    fields:
+      app: test-app
+
+# output.file:
+#   path: /logs/test
+#   filename: output.log
+
+output.logstash:
+  hosts: ["192.168.56.101:5044"]
+
+# logging:
+#   level: debug
+#   to_files: true # filebeat -e 커맨드로 실행할 경우 동작하지 않음
+#   files:
+#     path: /logs/filebeat
+#     name: filebeat.log
+#     keepfiles: 7
+#     permissions: 0644
+
+
+
