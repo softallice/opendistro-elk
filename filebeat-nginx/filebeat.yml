@@ -1,0 +1,74 @@
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      templates:
+        - condition:
+            contains:
+              docker.container.image: softmagic/client-web:latest
+          config:
+            - type: docker
+              containers.ids:
+                - "${data.docker.container.id}"
+            - module: nginx
+              access:
+                enabled: true
+                var.paths: ["/var/log/nginx/access.log"]
+                containers:
+                    stream: "stdout"
+              error:
+                enabled: true
+                var.paths: ["/var/log/nginx/error.log"]
+                containers:
+                    stream: "stderr"
+
+processors:
+- add_cloud_metadata: ~
+
+output.logstash:
+  hosts: ["172.27.42.57:5044"]
+
+setup.ilm:
+  setup.ilm.enabled: auto
+  setup.ilm.rollover_alias: "filebeat"
+  setup.ilm.pattern: "{now/d}-000001"
+# filebeat.inputs:
+#   - type: docker
+#     containers:
+#       path: "/usr/share/dockerlogs/data"
+#       stream: "stdout"
+#       ids:
+#         - "*"
+#       cri.parse_flags: true
+#       combine_partial: true
+#       exclude_files: ['\.gz$']
+
+# # setup.kibana:
+# #   host: "172.27.42.57:5601"
+ 
+# processors:
+#   - add_docker_metadata:
+#       host: "unix:///var/run/docker.sock"
+ 
+# filebeat.config.modules:
+#   path: ${path.config}/modules.d/*.yml
+#   reload.enabled: false
+ 
+# output.logstash:
+#   hosts: ["172.27.42.57:5011"]
+ 
+# log files:
+# logging.level: error
+# logging.to_files: false
+# logging.to_syslog: false
+# loggins.metrice.enabled: false
+# logging.files:
+#   path: /var/log/filebeat
+#   name: filebeat
+#   keepfiles: 7
+#   permissions: 0644
+# ssl.verification_mode: none

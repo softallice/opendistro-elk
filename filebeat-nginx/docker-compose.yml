@@ -1,0 +1,31 @@
+version: "3"
+services:
+  filebeat:
+    image: filebeat-docker-nginx:latest
+    container_name: filebeat
+    hostname: mydockerhost
+    # restart: unless-stopped
+    environment:
+      - ELASTICSEARCH_HOSTS=172.27.42.57:9200
+    labels:
+      co.elastic.logs/enabled: "false"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker:/var/lib/docker
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "2"
+
+
+  # filebeat:
+  #   image: filebeat-docker:latest
+  #   volumes:
+  #     - /var/lib/docker/containers:/usr/share/dockerlogs/data:ro
+  #     - /var/run/docker.sock:/var/run/docker.sock
+#     networks:
+#       - filebeat
+
+# networks:
+#   filebeat:          
