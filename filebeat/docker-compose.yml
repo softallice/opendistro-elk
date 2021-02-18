@@ -5,8 +5,8 @@ services:
     volumes:
       - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./logs/:/logs/
-    command:
-      - "/bin/sh"
-      - "-c"
-      - |
-        filebeat -e -strict.perms=false
+    # command:
+    #   - "/bin/sh"
+    #   - "-c"
+    #   - |
+    #     filebeat -e -strict.perms=false

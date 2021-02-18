@@ -47,6 +47,7 @@ services:
       # - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
     ports:
+      - "5044:5044"
       - "5011:5011"
       - "5012:5012"
       - "5013:5013"
